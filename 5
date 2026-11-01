@@ -1,0 +1,35 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Load Iris dataset from GitHub
+df = pd.read_csv(r"C:\Users\DELL\Downloads\iris.csv")
+df.head()
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+n_boot = 5000
+boot_means = [np.mean(np.random.choice(df["petal_length"], len(df), replace=True))
+ for _ in range(n_boot)]
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ci_lower, ci_upper = np.percentile(boot_means, [2.5, 97.5])
+print(f"95% CI: ({ci_lower:.2f}, {ci_upper:.2f})")
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+plt.figure(figsize=(8, 5))
+plt.hist(boot_means, bins=40, color="skyblue", edgecolor="black")
+plt.axvline(ci_lower, color="red", linestyle="--", label=f"Lower CI = {ci_lower:.2f}")
+plt.axvline(ci_upper, color="red", linestyle="--", label=f"Upper CI = {ci_upper:.2f}")
+plt.axvline(df["petal_length"].mean(), color="green", label="Observed Mean")
+plt.title("Bootstrap Distribution of Mean Petal Length")
+plt.xlabel("Mean Petal Length")
+plt.ylabel("Frequency")
+plt.legend()
+plt.show()
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
