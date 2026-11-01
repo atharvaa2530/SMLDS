@@ -1,0 +1,100 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv(r"C:\Users\DELL\Downloads\penguins.csv")
+
+print("Raw shape:", df.shape)
+df[["species", "island", "body_mass_g", "bill_length_mm", "sex"]].head()
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Drop the few rows with missing body_mass_g (needed for every method below)
+df = df.dropna(subset=["body_mass_g", "species", "island"]).reset_index(drop=True)
+N = len(df)
+print("Population size after cleaning:", N)
+
+print("\nSpecies distribution (will be our STRATA):")
+print(df["species"].value_counts(normalize=True).round(3))
+
+print("\nIsland distribution (will be our CLUSTERS):")
+print(df["island"].value_counts(normalize=True).round(3))
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TRUE_MEAN_MASS = df["body_mass_g"].mean()
+print(f"TRUE population mean body mass: {TRUE_MEAN_MASS:.1f} g")
+
+# Sanity check: body mass clearly differs by species -> a good candidate for stratification
+print("\nMean body mass by species:")
+print(df.groupby("species")["body_mass_g"].mean().round(1))     #Adelie, Chinstrap, Gentoo.
+
+print("\nMean body mass by island:")                           #Biscoe, Dream, Torgersen
+print(df.groupby("island")["body_mass_g"].mean().round(1))
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SAMPLE_SIZE = 100
+
+def srs_sample(data, n, seed):
+    return data.sample(n=n, random_state=seed)   # seed- a number that controls randomness
+
+srs = srs_sample(df, SAMPLE_SIZE, seed=1)
+srs_estimate = srs["body_mass_g"].mean()
+
+print(f"SRS sample size: {len(srs)}")
+print(f"SRS estimated mean body mass: {srs_estimate:.1f} g")
+print(f"Absolute error vs true value: {abs(srs_estimate - TRUE_MEAN_MASS):.1f} g")
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+def stratified_sample(data, n, strata_col, seed):
+    parts = []
+    for stratum_value, group in data.groupby(strata_col):
+        stratum_n = max(1, round(n * len(group) / len(data))) #For each species, it figures out how many rows to sample from that species so the sample mirrors the population's proportions.
+        parts.append(group.sample(n=stratum_n, random_state=seed))
+    return pd.concat(parts)
+
+strat = stratified_sample(df, SAMPLE_SIZE, "species", seed=1)
+strat_estimate = strat["body_mass_g"].mean()
+
+print(f"Stratified sample size: {len(strat)}")
+print("Species proportions in sample vs population:")
+comparison = pd.DataFrame({
+    "population_%": df["species"].value_counts(normalize=True).round(3),
+    "sample_%": strat["species"].value_counts(normalize=True).round(3)
+})
+print(comparison)
+
+print(f"\nStratified estimated mean body mass: {strat_estimate:.1f} g")
+print(f"Absolute error vs true value: {abs(strat_estimate - TRUE_MEAN_MASS):.1f} g")
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+def cluster_sample(data, cluster_col, seed, n_clusters=1):
+    rng = np.random.default_rng(seed)
+    clusters = data[cluster_col].unique()  # u get names of cluster
+    chosen = rng.choice(clusters, size=n_clusters, replace=False)
+    return data[data[cluster_col].isin(chosen)], chosen
+
+cluster, chosen_islands = cluster_sample(df, "island", seed=1, n_clusters=1)
+cluster_estimate = cluster["body_mass_g"].mean()
+
+print(f"Island(s) selected: {list(chosen_islands)}")
+print(f"Cluster sample size: {len(cluster)}")
+print(f"Cluster estimated mean body mass: {cluster_estimate:.1f} g")
+print(f"Absolute error vs true value: {abs(cluster_estimate - TRUE_MEAN_MASS):.1f} g")
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+results = pd.DataFrame({
+    "Method": ["SRS", "Stratified (species)", "Cluster (island)"],
+    "Sample Size": [len(srs), len(strat), len(cluster)],
+    "Estimated Mean Mass (g)": [srs_estimate, strat_estimate, cluster_estimate],
+    "Absolute Error (g)": [abs(srs_estimate - TRUE_MEAN_MASS),
+                            abs(strat_estimate - TRUE_MEAN_MASS),
+                            abs(cluster_estimate - TRUE_MEAN_MASS)]
+})
+results.round(1)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
