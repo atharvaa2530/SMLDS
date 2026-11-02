@@ -1,0 +1,56 @@
+import pandas as pd 
+import numpy as np 
+import matplotlib.pyplot as plt 
+import seaborn as sns 
+from scipy import stats 
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler, MinMaxScaler, RobustScaler 
+from sklearn.impute import SimpleImputer  #for handling missing values in a pipeline
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+df = pd.read_csv(r"C:\Users\DELL\Downloads\customer_data\customer_data.csv") 
+print(df.shape) 
+df.info() 
+df.head()
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Drop exact duplicate rows (e.g. C021 appears twice) 
+df = df.drop_duplicates() 
+
+# 'Customer_Lifespan_Months' has an invalid placeholder "XXXX" -> convert to NaN 
+df['Customer_Lifespan_Months'] = pd.to_numeric(df['Customer_Lifespan_Months'], errors='coerce')   # coerce: non-standard values that cannot be converted
+
+# Parse date column properly 
+df['Date_of_Purchase'] = 𝑝𝑑.𝑡𝑜_𝑑𝑎𝑡𝑒𝑡𝑖𝑚𝑒(𝑑𝑓['Date_of_Purchase'],errors='coerce')
+df.info() 
+#df.isnull().sum()
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#missing values 
+sns.heatmap(df.isnull(), cbar=False,  cmap='viridis') 
+plt.title('Missing Values') 
+plt.show()
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Binary columns -> Label Encoding 
+le_gender = LabelEncoder() 
+df['Gender_encoded'] = le_Genre.fit_transform(df['Gender'])                 
+# Nominal, multi-category -> One-Hot Encoding 
+#df = pd.get_dummies(df, columns=['City', 'Region'], prefix=['City', 'Region'])
+df.head() 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Boxplots 
+fig, axes = plt.subplots(1, 3, figsize=(15, 4)) 
+sns.boxplot(x=df['Income'], ax=axes[0]) 
+sns.boxplot(x=df['Age'], ax=axes[1]) 
+sns.boxplot(x=df['Average_Purchase_'], ax=axes[2]) 
+plt.tight_layout() 
+plt.show()
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
