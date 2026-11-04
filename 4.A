@@ -1,0 +1,285 @@
+1.Log in to Jira and create a new Scrum project named My Team.
+2. Open the Summary section to view project details and progress.
+3. Create tasks in the Backlog and organize them into a sprint.
+4. Start the sprint and track tasks using the Board.
+5. View task schedules using Timeline and explore the List/work-item view
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Version Control Using Git and GitHub
+   1.Create a new repository on GitHub.
+   2.Open Git Bash and check the installed Git version.
+   3.Configure the Git username and email address.
+   4.Verify the Git configuration using git config --list.
+   5.Create a project directory using mkdir and navigate into it using cd.
+   6.Initialize the directory as a Git repository using git init.
+   7.Check the repository status using git status.
+   8.Create a README.md file containing project information.
+   9.Add the file to the staging area using git add.
+   10.Commit the changes using git commit.
+   11.Rename the default branch to main using git branch -M main.
+   12.Connect the local repository to the GitHub repository using git remote add origin.
+   13.Push the local repository to GitHub using git push -u origin main.
+   14.Verify the uploaded files and commit history on GitHub.
+   15.Perform further changes, create commits and push updates to demonstrate version control and collaboration.
+git --version
+git config --global user.name "name"
+git config --global user.email "YOUR_EMAIL"
+git config --list
+mkdir GitProject
+cd GitProject
+git init
+git status
+echo "# My Git Project" > README.md
+git add README.md
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com//practice.git
+git push -u origin main
+git remote -v
+git status
+git log --oneline
+# For future updates
+echo "Updated project information" >> README.md
+git status
+git add README.md
+git commit -m "Updated README"
+git push
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Part 1: Java installation and configuration
+   1.Download and install Java JDK 25.
+   2.Open Command Prompt.
+  3.Check the Java version:
+      java -version
+  4.Check the Java compiler:
+      javac -version
+  5.Find the Java installation directory:
+      java -XshowSettings:properties -version 2>&1 | findstr "java.home"
+  6.Open Windows Search and search for Edit the system environment variables.
+  7. Click Environment Variables.
+    Variable value C:\Program Files\Java\jdk-25.0.5.0.3
+Open a new Command Prompt and verify:
+echo %JAVA_HOME%
+java -version
+javac -version
+Part 2: Download and install Jenkins
+   1.Open the official Jenkins Download Page.
+   2.Under Long-Term Support (LTS), select Windows.
+   3.Download the Windows .msi installer.
+   4.Open the downloaded MSI file.
+Part 3: Launch Jenkins and unlock it
+    1.Open Chrome.
+    2.Enter:  http://localhost:8080
+    3.Wait for the Unlock Jenkins page.
+    4.Retrieve the initial administrator password.
+    5.Copy the password from the Command Prompt.
+   6.Paste it into the Administrator Password field in Jenkins.
+   7.Click Continue.
+   8.Select Install suggested plugins.
+   9.Wait for plugin installation to complete.
+   10.Create your first administrator account.
+   11.Click Save and Finish.
+   12.Click Start using Jenkins.
+Part 4: Create a CI/CD Pipeline
+    1.Open the Jenkins dashboard.
+    2.Click New Item.
+    3.Enter the project name:  Hello-World-Pipeline
+   4.Select Pipeline.
+   5.Scroll down to the Pipeline section.
+   6.Under Definition, select Pipeline script.
+   7.Paste this complete script into the Script box:
+pipeline {
+    agent any
+     stages {
+stage('Hello') {
+steps {
+echo 'name'
+            }
+        }
+    }
+}
+9. Click Save.
+Part 5: Execute the CI/CD pipeline
+   1.Open the Hello-World-Pipeline project.
+   2.Click Build Now.
+   3.Wait for the execution to complete.
+   4.Check the Build History section.
+   5.Click build number #1.
+   6.Click Console Output.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+INTEGRATE GITHUB WITH JENKINS
+  Opened jenkins then created a new item - free style proj
+  In source code management select git opt
+  Copy ur repo link form github there
+  Change the */master to */main
+  In build steps select Click Add build step and select Execute Windows batch command.
+  echo [BUILD STAGE] Fetching code and compiling project...
+  echo Build completed successfully.
+  Then add one more
+  echo [TEST STAGE] Executing automated unit test suite...
+  echo All tests passed: 0 failures, 0 errors.
+  Save it
+  Now click build now
+Check in the console output too for verification
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+*Install VirtualBox
+Verify installation:
+  Open CMD and type:
+    VBoxManage --version  (You should see the installed VirtualBox version.)
+*Install Minikube
+ Open Command Prompt.
+   1.Check Winget:
+       winget --version
+  2.Install Minikube:
+       winget install -e --id Kubernetes.minikube
+  3.If it asks for permission, type Y and press Enter.
+  4.Wait until installation finishes.
+  5.Close CMD and open it again.
+  6.Check Minikube installation:
+      minikube version
+*Install kubectl
+   Open Command Prompt.
+   1.Check Winget (if already checked, skip this).
+       winget --version
+   2.Install kubectl:
+       winget install -e --id Kubernetes.kubectl
+  3.If it asks for permission, type Y and press Enter.
+  4.Wait for installation to complete.
+  5.Close CMD and open it again.
+  6.Verify installation:
+      kubectl version --client
+*Open Command Prompt (again)
+   Check Minikube installation
+     minikube version
+   1.Start Minikube cluster using VirtualBox
+       minikube start --driver=virtualbox
+  2.Check the status of the cluster
+       minikube status
+  3.Check Kubernetes nodes
+       kubectl get nodes
+  4.Create and deploy an application
+       kubectl create deployment nginx --image=nginx
+  5.Check the running pods
+       kubectl get pods
+  6.Check the deployment
+      kubectl get deployments
+Open CMD and enter:
+   kubectl expose deployment nginx --type=NodePort --port=80
+Check the available services
+   kubectl get services
+Access the application
+   minikube service nginx
+This command will open the Nginx application in your default web browser.
+Minikube stop
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+*Download docket desktop and gitbash
+   Check Docker:  docker --version
+   Check Git: git --version
+ Clone the GitHub project
+    Open CMD.
+      git clone https://github.com/docker/getting-started-todo-app
+    Press Enter.
+ Navigate into the project folder
+      Enter: cd getting-started-todo-app
+      To check the files, enter: dir
+Start the development environment
+    docker compose watch
+Press Enter and wait.
+    Open your browser:
+    Open the Docker To-Do application
+      You should see a To-Do application where you can add and delete tasks.
+    Develop with containers 
+    Check containers in Docker Desktop
+      1.Open Docker Desktop.
+      2.Click Containers in the left sidebar.
+      3.Find the getting-started-todo-app application group.
+      4.Expand it to view the running containers.
+Build a Docker image
+    docker build -t welcome .
+Before running it, open a second CMD window and navigate into the project directory:
+   cd getting-started-todo-app
+Check whether a Dockerfile exists:
+   dir Dockerfile
+If it exists, execute:
+   docker build -t welcome .
+To check the images:
+   docker images
+Step 7: Stop the application
+Go back to the first CMD window where docker compose watch is running.
+Press:
+Ctrl + C
+Then enter:
+docker compose down
+This stops and removes the application's containers and network.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Step 1. Download Grafana
+Step 2. Install Grafana
+Step 3. Start Grafana
+  Open Command Prompt as Administrator.
+  -net start Grafana
+  If the service is already running, Windows may tell you that it has already been started.
+Step 4. Open Grafana
+  Open Chrome and enter:
+  http://localhost:3000
+Step 5. Login
+  Use the default credentials:
+  Username: admin
+  Password: admin
+*How to access the default sample data
+  Step 1. Log in to Grafana at http://localhost:3000.
+  Step 2. On the left sidebar, click Connections.
+  Step 3. Select Add new connection.
+  Step 4. Search for:
+    TestData
+  Step 5. Select TestData from the results.
+  Step 6. Click Add new data source.
+     Create First Data Source - Grafana Tutorials
+  Step 7. Click Save & test.
+     You should see: Data source is working
+*Create your first dashboard
+ A dashboard is a collection of graphs and visualizations displayed together.
+   Step 1. On the left sidebar, click Dashboards.
+   Step 2. Click New.
+   Step 3. Select New dashboard.
+   Step 4. Click Add visualization or Add new panel (depending on your Grafana version).
+   Step 5. Select your data source: TestData
+   Step 6. In the query editor, select a scenario such as: Random Walk
+   This generates simulated numerical data that changes over time.
+   Step 7. Click Run queries or Refresh.
+   Step 8. Select the visualization type: Time series - You should now see a graph.
+   Step 9. Give your panel a title: Sample Data Monitoring
+   Step 10. Click Apply, then save the dashboard.
+*Create different types of graphs
+Graph 1: Time Series Graph
+Graph Panel - Grafana Tutorials
+Graph 2: Bar Chart
+Graph 3: Gauge
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Step 1: Sign in to AWS Management Console
+  - Open the AWS Management Console and sign in.
+Step 2: Navigate to AWS Lambda
+  - Go to Services → Lambda.
+Step 3: Create a New Lambda Function
+  - Click Create function → Author from scratch.
+Step 4: Configure the Function
+    Enter a function name.
+    Select a runtime such as Python or Node.js.
+    Create or select an appropriate IAM role.
+Step 5: Write the Lambda Function Code
+    Open the Code section and write the Lambda function.
+    Use lambda_handler(event, context) as the entry point.
+Example Python code:
+def lambda_handler(event, context):
+return {
+'statusCode': 200,
+'body': 'Hello from AWS Lambda!'
+}
+  - Click Deploy to save the code.
+Step 6: Test the Function
+  - Click Test, create a test event, and invoke the function.
+Step 7: Review the Execution Results
+  Check the execution results for the function output.
+  Verify that the function executes successfully.
+Step 8: Deploy the Function (Optional)
+  Integrate Lambda with services like API Gateway, S3, or Step Functions.
+Step 9: Monitor and Manage
+  Use Amazon CloudWatch to view logs, metrics, and troubleshoot issues.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
